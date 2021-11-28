@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Product>
+
+<div class="container p-3 bg-white">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">Список товаров</h2>
+        </div>
+        <div class="col-6 text-right">
+            <a asp-action="CreateOrUpdate" class="btn btn-primary"> <i class="fas fa-plus"></i> &nbsp; Создать новый товар</a>
+        </div>
+    </div>
+
+    <br /><br />
+
+    @if (Model != null && Model.Count() > 0)
+    {
+        <table class="table table-bordered table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+                        Название товара
+                    </th>
+                    <th>
+                        Цена
+                    </th>
+                    <th>
+                        Категория
+                    </th>
+                    <th>
+                        Назначение
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in Model)
+                {
+                <tr>
+                    <td style="width: 50%">
+                        @product.Name
+                    </td>
+                    <td style="width: 10%">
+                        @product.Price
+                    </td>
+                    <td style="width: 20%">
+                        @product.Category.Name
+                    </td>
+                    <td style="width: 20%">
+                        @product.ApplicationType.Name
+                    </td>
+                    <td class="text-center">
+                        <div class="btn-group w-75" role="group">
+                            <a asp-route-ID="@product.Id" asp-action="CreateOrUpdate" class="btn btn-primary mx-2"><i class="fas fa-edit"></i></a>
+                            <a asp-route-ID="@product.Id" asp-action="Delete" class="btn btn-danger mx-2"><i class="fas fa-trash-alt"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Товаров не существует</p>
+    }
+</div>
+

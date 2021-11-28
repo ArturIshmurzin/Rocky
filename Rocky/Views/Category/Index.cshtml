@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Category>
+
+<div class="container bg-white">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">Список категорий</h2>
+        </div>
+        <div class="col-6 text-right">
+            <a asp-controller="Category" asp-action="Create" class="btn btn-primary"> <i class="fas fa-plus"></i> &nbsp; Создать новую категорию</a> 
+        </div>
+    </div>
+
+    <br /><br />
+
+    @if (Model != null && Model.Count() > 0)
+    {
+        <table class="table table-bordered table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+                        Название категории
+                    </th>
+                    <th>
+                        Порядок отображения
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var category in Model)
+                {
+                    <tr>
+                        <td style="width: 50%">
+                            @category.Name
+                        </td>
+                        <td style="width: 30%">
+                            @category.DisplayOrder
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group w-75" role="group">
+                                <a asp-controller="Category" asp-route-ID="@category.Id" asp-action="Edit" class="btn btn-primary mx-2"><i class="fas fa-edit"></i></a>
+                                <a asp-controller="Category" asp-route-ID="@category.Id" asp-action="Delete" class="btn btn-danger mx-2"><i class="fas fa-trash-alt"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Категорий не существует</p>
+    }
+</div>
+

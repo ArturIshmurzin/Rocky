@@ -1,0 +1,201 @@
+﻿@model Rocky_Models.ViewModels.ProductUserVM
+
+<form method="post" id="payment-form">
+    <br />
+    <div class="backgroundWhiteBorder">
+        <div class="container">
+            <div class="card">
+                <div class="card-header bg-dark text-light ml-0 row container">
+                    <div class="col-6">
+                        <i class="fa fa-shopping-cart"></i> &nbsp;
+                        Детали заказа
+                    </div>
+                    <div class="col-6 text-right">
+                        <a class="btn btn-outline-info btn-sm" asp-action="Index">Вернуться в корзину</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="container rounded p-2">
+                        <div class="row">
+                            <div class="col-12 col-lg-7 pb-4">
+                                <div class="row">
+                                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="text-info">Информация о получателе:</span>
+                                    </h4>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Имя</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input asp-for="@Model.ApplicationUser.FullName" type="text" class="form-control" />
+                                        <span asp-validation-for="@Model.ApplicationUser.FullName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Телефон</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input asp-for="@Model.ApplicationUser.PhoneNumber" required type="text" class="form-control" />
+                                        <span asp-validation-for="@Model.ApplicationUser.PhoneNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Email</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input asp-for="@Model.ApplicationUser.Email" required type="text" class="form-control" />
+                                        <span asp-validation-for="@Model.ApplicationUser.Email" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                @if (User.IsInRole(Rocky_Utility.WC.AdminRole))
+                                {
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label>Штат</label>
+                                        </div>
+                                        <div class="col-9">
+                                            <input asp-for="@Model.ApplicationUser.State" type="text" class="form-control" />
+                                            <span asp-validation-for="@Model.ApplicationUser.State" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label>Адрес</label>
+                                        </div>
+                                        <div class="col-9">
+                                            <input asp-for="@Model.ApplicationUser.StreetAddress" type="text" class="form-control" />
+                                            <span asp-validation-for="@Model.ApplicationUser.StreetAddress" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label>Город</label>
+                                        </div>
+                                        <div class="col-9">
+                                            <input asp-for="@Model.ApplicationUser.City" type="text" class="form-control" />
+                                            <span asp-validation-for="@Model.ApplicationUser.City" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label>Почтовый индекс</label>
+                                        </div>
+                                        <div class="col-9">
+                                            <input asp-for="@Model.ApplicationUser.PostalCode" type="text" class="form-control" />
+                                            <span asp-validation-for="@Model.ApplicationUser.PostalCode" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-12 col-lg-5 row">
+                                <div class="col-12">
+                                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="text-info">Детали:</span>
+                                    </h4>
+                                    <ul class="list-group mb-3">
+                                        @{
+                                            var totalPrice = 0.0;
+                                        }
+                                        @for (int i = 0; i < Model.ProductList.Count(); i++)
+                                        {
+                                            <input hidden asp-for="@Model.ProductList[i].Name" />
+                                            <input hidden asp-for="@Model.ProductList[i].Price" />
+                                            <input hidden asp-for="@Model.ProductList[i].TempCount" />
+                                            <input hidden asp-for="@Model.ProductList[i].Id" />
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <div>
+                                                    <h6 class="my-0">@Model.ProductList[i].Name</h6>
+                                                    @if (User.IsInRole(Rocky_Utility.WC.AdminRole))
+                                                    {
+                                                        <small class="text-muted">Количество: @Model.ProductList[i].TempCount</small>
+                                                    }
+                                                    else
+                                                    {
+                                                        <small class="text-muted">Цена: @Model.ProductList[i].Price.ToString("c")</small>
+                                                    }
+                                                </div>
+                                                @if (User.IsInRole(Rocky_Utility.WC.AdminRole))
+                                                {
+                                                    <span class="text-muted">$@(Model.ProductList[i].TempCount * Model.ProductList[i].Price)</span>
+                                                }
+                                            </li>
+
+                                            totalPrice += (Model.ProductList[i].TempCount * Model.ProductList[i].Price);
+                                        }
+                                        @if (User.IsInRole(Rocky_Utility.WC.AdminRole))
+                                        {
+                                            <li class="list-group-item d-flex justify-content-between bg-light">
+                                                <small class="text-info">Итого</small>
+                                                <strong class="text-info">$@totalPrice</strong>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                                @if (User.IsInRole(Rocky_Utility.WC.AdminRole))
+                                {
+                                    <div class="col-12">
+                                            <div class="container">
+                                                <div id="dropin-container"></div>
+                                                <input type="hidden" id="nonce" name="payment_method_nonce" />
+                                            </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-12 col-md-5 offset-md-7">
+                            @if (User.IsInRole(Rocky_Utility.WC.AdminRole))
+                            {
+                                <button id="submit-button" class="btn btn-success form-control">Создать заказ</button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-primary form-control">Submit Inquiry</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+
+    <script src="https://js.braintreegateway.com/web/dropin/1.32.1/js/dropin.min.js"></script>
+    <script>
+        var clientToken = "@ViewBag.ClientToken";
+        var form = document.querySelector("#payment-form");
+
+        braintree.dropin.create({
+            authorization: clientToken,
+            container: '#dropin-container'
+        }, (error, dropinInstance) => {
+            if (error) console.error(error);
+
+            form.addEventListener('submit', event => {
+                event.preventDefault();
+
+                dropinInstance.requestPaymentMethod((error, payload) => {
+                    if (error) console.error(error);
+
+                    // Step four: when the user is ready to complete their
+                    //   transaction, use the dropinInstance to get a payment
+                    //   method nonce for the user's selected payment method, then add
+                    //   it a the hidden field before submitting the complete form to
+                    //   a server-side integration
+                    document.getElementById('nonce').value = payload.nonce;
+                    form.submit();
+                });
+            });
+        });
+    </script>
+}

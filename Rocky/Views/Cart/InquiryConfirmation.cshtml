@@ -1,0 +1,20 @@
+﻿@model Rocky_Models.OrderHeader
+
+<div class="text-center">
+    @if (Model != null)
+    {
+        <h1>Заказ создан</h1>
+
+        <p>Заказ @Model.Id успешно создан!</p>
+    }
+    else
+    {
+
+    <h1>Запрос отправлен</h1>
+
+    <p>Запрос успешно отправлен!</p>
+    }
+
+    <img src="/images/patio.jpg" style="width:80%" />
+</div>
+

@@ -1,0 +1,49 @@
+﻿@model IEnumerable<ApplicationType>
+
+<div class="container p-3 bg-white">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">Список типов приложений</h2>
+        </div>
+        <div class="col-6 text-right">
+            <a asp-controller="ApplicationType" asp-action="Create" class="btn btn-primary"> <i class="fas fa-plus"></i> &nbsp; Создать новый тип приложения</a>
+        </div>
+    </div>
+
+    <br /><br />
+
+    @if (Model != null && Model.Count() > 0)
+    {
+        <table class="table table-bordered table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+                        Название
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var applicationType in Model)
+                {
+                    <tr>
+                        <td style="width: 80%">
+                            @applicationType.Name
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group w-75" role="group">
+                                <a asp-route-ID="@applicationType.Id" asp-controller="ApplicationType" asp-action="Edit" class="btn btn-primary mx-2"> <i class="fas fa-edit"></i></a>
+                                <a asp-route-ID="@applicationType.Id" asp-controller="ApplicationType" asp-action="Delete" class="btn btn-danger mx-2"> <i class="fas fa-trash-alt"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Стран не существует</p>
+    }
+</div>
+

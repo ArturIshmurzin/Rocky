@@ -1,0 +1,98 @@
+﻿@page
+@model RegisterModel
+
+<div class="py-4">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="row form-group">
+        <div class="col-8 offset-2">
+            <div class="card">
+                <div class="card-body px-lg-4 pt-4">
+                    <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                        <h3 class="col-12 text-success text-center py-4">
+                            @if (User.IsInRole(Rocky_Utility.WC.AdminRole))
+                            {
+                                <strong>Создание учетной записи администратора</strong>
+                            }
+                            else
+                            {
+                                <strong>Регистрация</strong>
+                            }
+                        </h3>
+                        <hr />
+                        <div class="py-2">
+                            <input asp-for="Input.FullName" placeholder="Имя" class="form-control" />
+                            <span asp-validation-for="Input.FullName" class="text-danger"></span>
+                        </div>
+                        <div class="py-2">
+                            <input asp-for="Input.Email" type="email" placeholder="Email" class="form-control" />
+                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                        </div>
+                        <div class="py-2">
+                            <div class="input-group">
+                                <div class="input-group-prepend ">
+                                    <span class="input-group-text">+7</span>
+                                </div>
+                                <input asp-for="Input.PhoneNumber" type="text" placeholder="Номер телефона" class="form-control" />
+                            </div>
+                            <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                        </div>
+                        <div class="py-2 form-row row">
+                            <div class="col-6">
+                                <input asp-for="Input.Password" type="password" placeholder="Пароль" class="form-control" />
+                            </div>
+                            <div class="col-6">
+                                <input asp-for="Input.ConfirmPassword" type="password" placeholder="Подтвердите пароль" class="form-control" />
+                            </div>
+                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                        </div>
+                        <div class="py-2">
+                            @if (User.IsInRole(Rocky_Utility.WC.AdminRole))
+                            {
+                                <button type="submit" class="form-control btn btn-warning">Создать учетную запись администратора</button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="form-control btn btn-primary">Зарегистрироваться</button>
+                            }
+                        </div>
+                    </form>
+                    @if (!User.IsInRole(Rocky_Utility.WC.AdminRole))
+                    {
+                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                        <p>Нажимая кнопку <em>Зарегистрироваться</em> вы соглащаетесь с <a href="" target="_blank">пользовательским соглашением</a></p>
+                        <hr />
+                        <div class="row">
+                            <p>
+                                @foreach (var provider in Model.ExternalLogins)
+                                {
+                                    if (provider.Name.ToLower().Contains("facebook"))
+                                    {
+                                        <button type="submit"
+                                                class="btn btn-block btn-primary btn-facebook"
+                                                name="provider"
+                                                value="@provider.Name"
+                                                title="Log in using your @provider.DisplayName account">
+                                            <i class="fab fa-facebook-square"></i>@provider.DisplayName
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                    }
+                                }
+                            </p>
+                        </div>
+                    </form>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
